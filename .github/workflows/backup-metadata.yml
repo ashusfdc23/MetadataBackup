@@ -1,0 +1,40 @@
+name: Backup Metadata
+
+on:
+  schedule:
+    - cron: "0 2 * * *"  # Every day at 2 AM UTC
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Salesforce CLI
+        uses: amtrack/sfdx-actions/setup-sfdx@v1
+
+      - name: Authenticate with JWT
+        run: |
+          echo "${{ secrets.SF_JWT_KEY }}" > server.key
+          sfdx auth:jwt:grant \
+            --clientid "${{ secrets.SF_CLIENT_ID }}" \
+            --jwtkeyfile server.key \
+            --username "${{ secrets.SF_USERNAME }}" \
+            --instanceurl "${{ secrets.SF_INSTANCE_URL }}" \
+            --setalias sf
+
+      - name: Retrieve Metadata
+        run: |
+          mkdir -p force-app
+          sfdx force:source:retrieve -x manifest/package.xml --targetusername sf
+
+      - name: Commit metadata to repo
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          git commit -m "Daily metadata backup: $(date)" || echo "No changes"
+          git push
