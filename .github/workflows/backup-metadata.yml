@@ -3,7 +3,7 @@ name: Backup Metadata
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # Runs every day at 2 AM UTC
+    - cron: '0 2 * * *'  # Every day at 2 AM UTC
 
 jobs:
   backup:
@@ -18,7 +18,9 @@ jobs:
 
       - name: Create JWT key file
         run: |
-          echo "${{ secrets.SF_JWT_KEY }}" > server.key
+          cat <<EOF > server.key
+          ${{ secrets.SF_JWT_KEY }}
+          EOF
 
       - name: Authenticate to Salesforce Org
         run: |
