@@ -34,7 +34,7 @@ jobs:
           mkdir -p mdapi_output
           sfdx force:source:retrieve -x manifest/package.xml -u jwtOrg
 
-      - name: Commit & Push to GitHub
+      - name: Commit & Push
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
