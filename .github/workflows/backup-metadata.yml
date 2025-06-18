@@ -2,6 +2,8 @@ name: Backup Metadata
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # Runs every day at 2 AM UTC
 
 jobs:
   backup:
@@ -14,29 +16,31 @@ jobs:
       - name: Setup Salesforce CLI
         uses: sfdx-actions/setup-sfdx@v1
 
-      - name: Save Private Key
+      - name: Create JWT key file
         run: |
-          echo "${{ secrets.SF_JWT_KEY }}" | awk '{print}' > server.key
+          echo "${{ secrets.SF_JWT_KEY }}" > server.key
 
-      - name: Authenticate with JWT
+      - name: Authenticate to Salesforce Org
         run: |
-          sfdx auth:jwt:grant --clientid ${{ secrets.SF_CLIENT_ID }} --jwtkeyfile server.key --username ${{ secrets.SF_USERNAME }} --instanceurl ${{ secrets.SF_INSTANCE_URL }} --setalias jwtOrg
+          sfdx auth:jwt:grant \
+            --client-id ${{ secrets.SF_CLIENT_ID }} \
+            --jwt-key-file server.key \
+            --username ${{ secrets.SF_USERNAME }} \
+            --instance-url https://login.salesforce.com \
+            --alias jwtOrg
 
       - name: Retrieve metadata
         run: |
-          mkdir mdapi_output
+          mkdir -p mdapi_output
           sfdx force:source:retrieve -x manifest/package.xml -u jwtOrg
 
-      - name: Commit & Push
+      - name: Commit & Push to GitHub
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-       run: |
-        git config user.name "github-actions"
-        git config user.email "actions@github.com"
-        git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
-        git add .
-        git commit -m "Automated metadata backup" || echo "Nothing to commit"
-        git push
-
-
-
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+          git add .
+          git commit -m "Automated metadata backup" || echo "Nothing to commit"
+          git push
