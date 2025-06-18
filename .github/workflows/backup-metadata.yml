@@ -1,8 +1,6 @@
 name: Backup Metadata
 
 on:
-  schedule:
-    - cron: "0 2 * * *"  # Every day at 2 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -10,31 +8,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v4
 
       - name: Setup Salesforce CLI
-        uses: amtrack/sfdx-actions/setup-sfdx@v1
+        uses: sfdx-actions/setup-sfdx@v1
 
       - name: Authenticate with JWT
         run: |
-          echo "${{ secrets.SF_JWT_KEY }}" > server.key
-          sfdx auth:jwt:grant \
-            --clientid "${{ secrets.SF_CLIENT_ID }}" \
-            --jwtkeyfile server.key \
-            --username "${{ secrets.SF_USERNAME }}" \
-            --instanceurl "${{ secrets.SF_INSTANCE_URL }}" \
-            --setalias sf
+          echo "$SF_JWT_KEY" > server.key
+          sfdx auth:jwt:grant --clientid ${{ secrets.SF_CLIENT_ID }} --jwtkeyfile server.key --username ${{ secrets.SF_USERNAME }} --instanceurl https://login.salesforce.com --setalias jwtOrg
 
-      - name: Retrieve Metadata
+      - name: Retrieve metadata
         run: |
-          mkdir -p force-app
-          sfdx force:source:retrieve -x manifest/package.xml --targetusername sf
+          mkdir mdapi_output
+          sfdx force:source:retrieve -x manifest/package.xml -u jwtOrg
 
-      - name: Commit metadata to repo
+      - name: Commit & Push
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
           git add .
-          git commit -m "Daily metadata backup: $(date)" || echo "No changes"
+          git commit -m "Automated metadata backup"
           git push
