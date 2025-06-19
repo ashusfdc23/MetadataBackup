@@ -3,7 +3,7 @@ name: Backup Metadata
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # Every day at 2 AM UTC
+    - cron: '0 2 * * *'
 
 jobs:
   backup:
@@ -18,9 +18,7 @@ jobs:
 
       - name: Create JWT key file
         run: |
-          cat <<EOF > server.key
-          ${{ secrets.SF_JWT_KEY }}
-          EOF
+          echo "${{ secrets.SF_JWT_KEY }}" > server.key
 
       - name: Authenticate to Salesforce Org
         run: |
@@ -36,13 +34,18 @@ jobs:
           mkdir -p mdapi_output
           sfdx force:source:retrieve -x manifest/package.xml -u jwtOrg
 
-      - name: Commit & Push
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+      - name: Setup SSH
         run: |
-          git config --global user.email "you@example.com"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Commit & Push
+        run: |
+          git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ashusfdc23/MetadataBackup.git
+          git remote set-url origin git@github.com:ashusfdc23/MetadataBackup.git
           git add .
           git commit -m "Automated metadata backup" || echo "Nothing to commit"
           git push origin main
