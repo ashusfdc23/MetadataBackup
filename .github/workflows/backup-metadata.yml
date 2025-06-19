@@ -44,7 +44,7 @@ jobs:
           git config user.email "actions@github.com"
           git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
           # 👇 Step 3: Show the current git remote being used
-          git remote -v
+          git remote show origin
           git add .
           git commit -m "Automated metadata backup" || echo "Nothing to commit"
           git push
