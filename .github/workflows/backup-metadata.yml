@@ -38,11 +38,11 @@ jobs:
 
       - name: Commit & Push
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "GitHub Actions"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ashusfdc23/MetadataBackup.git
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/ashusfdc23/MetadataBackup.git
           git add .
           git commit -m "Automated metadata backup" || echo "Nothing to commit"
           git push origin main
