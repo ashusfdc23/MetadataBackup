@@ -36,15 +36,14 @@ jobs:
           mkdir -p mdapi_output
           sfdx force:source:retrieve -x manifest/package.xml -u jwtOrg
 
-      - name: Commit & Push
+      - name: Commit & Push to GitHub
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
-          # 👇 Step 3: Show the current git remote being used
-          git remote show origin
           git add .
           git commit -m "Automated metadata backup" || echo "Nothing to commit"
           git push
+
