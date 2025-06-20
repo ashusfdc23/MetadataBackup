@@ -13,8 +13,63 @@
     <name>CustomObject</name>
   </types>
   <types>
+    <members>Account.*</members>
+    <members>Contact.*</members>
+    <members>Opportunity.*</members>
+    <members>Lead.*</members>
+    <name>CustomField</name>
+  </types>
+  <types>
     <members>*</members>
     <name>Profile</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>PermissionSet</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>Layout</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>Flow</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>Workflow</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>ValidationRule</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>RecordType</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>GlobalValueSet</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>CustomLabels</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>StaticResource</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>RemoteSiteSetting</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>NamedCredential</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>CustomMetadata</name>
   </types>
   <version>59.0</version>
 </Package>
