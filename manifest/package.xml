@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
+
+  <!-- Apex Code -->
   <types>
     <members>*</members>
     <name>ApexClass</name>
@@ -8,17 +10,18 @@
     <members>*</members>
     <name>ApexTrigger</name>
   </types>
+
+  <!-- Custom and Standard Objects -->
   <types>
-    <members>*</members>
+    <members>Account</members>
+    <members>Contact</members>
+    <members>Lead</members>
+    <members>Opportunity</members>
+    <members>*</members> <!-- All custom objects -->
     <name>CustomObject</name>
   </types>
-  <types>
-    <members>Account.*</members>
-    <members>Contact.*</members>
-    <members>Opportunity.*</members>
-    <members>Lead.*</members>
-    <name>CustomField</name>
-  </types>
+
+  <!-- Profiles and Permission Sets -->
   <types>
     <members>*</members>
     <name>Profile</name>
@@ -27,14 +30,22 @@
     <members>*</members>
     <name>PermissionSet</name>
   </types>
+
+  <!-- UI Metadata -->
   <types>
     <members>*</members>
     <name>Layout</name>
   </types>
   <types>
     <members>*</members>
+    <name>RecordType</name>
+  </types>
+  <types>
+    <members>*</members>
     <name>Flow</name>
   </types>
+
+  <!-- Automation and Validation -->
   <types>
     <members>*</members>
     <name>Workflow</name>
@@ -43,17 +54,21 @@
     <members>*</members>
     <name>ValidationRule</name>
   </types>
+
+  <!-- Custom Metadata and Labels -->
   <types>
     <members>*</members>
-    <name>RecordType</name>
-  </types>
-  <types>
-    <members>*</members>
-    <name>GlobalValueSet</name>
+    <name>CustomMetadata</name>
   </types>
   <types>
     <members>*</members>
     <name>CustomLabels</name>
+  </types>
+
+  <!-- Supporting Metadata -->
+  <types>
+    <members>*</members>
+    <name>GlobalValueSet</name>
   </types>
   <types>
     <members>*</members>
@@ -67,9 +82,9 @@
     <members>*</members>
     <name>NamedCredential</name>
   </types>
-  <types>
-    <members>*</members>
-    <name>CustomMetadata</name>
-  </types>
+
+  <!-- Add more types as needed -->
+  
   <version>59.0</version>
+
 </Package>
