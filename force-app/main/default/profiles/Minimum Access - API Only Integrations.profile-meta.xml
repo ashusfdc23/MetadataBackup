@@ -417,6 +417,9 @@
         <readable>false</readable>
     </fieldPermissions>
     <layoutAssignments>
+        <layout>FlowOrchestrationWorkItem-Orchestration Work Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>sf_devops__App_Config__mdt-sf_devops__App Config Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
